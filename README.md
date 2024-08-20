@@ -121,6 +121,9 @@ In this stage, we are focusing on three things
 
 
 
- 
+## Acknowledgments
+
+Parts of this guide were adapted from the [AWS Getting Started Hands-On Guide](https://aws.amazon.com/getting-started/hands-on/create-continuous-delivery-pipeline/?ref=gsrchandson) with which I learnt. The original content is available on the [AWS website](https://aws.amazon.com/).
+`
 
 
