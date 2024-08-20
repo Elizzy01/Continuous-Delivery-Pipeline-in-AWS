@@ -17,15 +17,15 @@ In this tutorial, you will:
 
 Before starting this tutorial, you will need an AWS account. If you don't already have one, follow the [Setting Up Your AWS Environment](https://aws.amazon.com/getting-started/guides/setup-environment/) getting started guide for a quick overview. The entire steps are below grouped into five modules.
 
-- [Step 1 - Setting Up Github REPO](#step-1---setting-up-github-repo)
-- [Step 2 - Deploy Web App](#step-2---deploy-web-app)
-- [Step 3 - Create Build Project](#step-3---create-build-project)
-- [Step 4 - Create Delivery Pipeline](#step-4---create-delivery-pipeline)
-- [Step 5 - Finalize Pipeline and Test](#step-5---finalize-pipeline-and-test)
+- [Stage 1 - Setting Up Github REPO](#step-1---setting-up-github-repo)
+- [Stage 2 - Deploy Web App](#step-2---deploy-web-app)
+- [Stage 3 - Create Build Project](#step-3---create-build-project)
+- [Stage 4 - Create Delivery Pipeline](#step-4---create-delivery-pipeline)
+- [Stage 5 - Finalize Pipeline and Test](#step-5---finalize-pipeline-and-test)
 
 Let's dig deeper into each of the steps..
 
-## Step 1 - Setting Up Github REPO
+## Stage 1 - Setting Up Github REPO
 So basically my app was already on a github repo. If it were to be a native AWS architecture, we would rather use **CodeCommit**. Here is the link to the repo [asw-elastic-beanstalk-expressjs-sample](https://github.com/aws-samples/aws-elastic-beanstalk-express-js-sample)
 
 - Click on the 'fork' button on the right top of the repo page to create a copy of the repo in your account.
@@ -52,7 +52,40 @@ git push
 - To test and see your changes, navigate to your github account, on the left navigation panel, under Repositories, select the one named `aws-elastic-beanstalk-express-js-sample`.
 - Choose the `app.js` file. The contents of the file, including your change, should be displayed.
 
-## Step 2 - Deploy Web App
+## Stage 2 - Deploy Web App 
+In this stage, we are focusing on three things
+- Configure and create an AWS Elastic Beanstalk environment
+- Deploy a sample web app to AWS Elastic Beanstalk
+- Test the sample web app
+
+### Key concepts
+- AWS Elastic Beanstalk - A service that makes it easy to deploy your application on AWS. You simply upload your code and Elastic Beanstalk deploys, manages, and scales your application.
+
+- Environment - Collection of AWS resources provisioned by Elastic Beanstalk that are used to run your application.
+
+- EC2 instance - Virtual server in the cloud. Elastic Beanstalk will provision one or more Amazon EC2 instances when creating an environment.
+
+- Web server - Software that uses the HTTP protocol to serve content over the Internet. It is used to store, process, and deliver web pages.
+
+- Platform—Combination of operating system, programming language runtime, web server, application server, and Elastic Beanstalk components. Your application runs using the components provided by a platform.
+
+### Configure an AWS Elastic Beanstalk App
+1. In a new browser tab, open the [AWS Elastic Beanstalk console](https://console.aws.amazon.com/elasticbeanstalk/home?region=us-west-2#/welcome).
+2. <span style="color: red;">Please take note to check the region where you're provisioning resources. I had issues later on when I had my service provisioned in different region, So I finally settled for US-West-2.</span>
+3. Choose the orange **Create Application button**.
+4. Choose **Web server environment** under the Configure environment heading.
+   
+![image](https://github.com/user-attachments/assets/bd88c26e-1624-46b6-9e13-4eb4f7715834)
+
+4. In the text box under the heading Application name, enter **DevOpsGettingStarted**.
+
+![image](https://github.com/user-attachments/assets/6770f7fe-a8ab-4a0a-8d74-e59e841e9ba5)
+
+
+5. In the Platform dropdown menu, under the Platform heading, select **Node.js**. Platform branch and Platform version will automatically populate with default selections.
+6. Confirm that the radio button next to Sample application under the Application code heading is selected.
+7. Confirm that the radio button next to Single instance (free tier eligible) under the Presets heading is selected.
+8. Select Next.
 
  
 
