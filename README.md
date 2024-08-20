@@ -71,21 +71,55 @@ In this stage, we are focusing on three things
 
 ### Configure an AWS Elastic Beanstalk App
 1. In a new browser tab, open the [AWS Elastic Beanstalk console](https://console.aws.amazon.com/elasticbeanstalk/home?region=us-west-2#/welcome).
-2. <span style="color: red;">Please take note to check the region where you're provisioning resources. I had issues later on when I had my service provisioned in different region, So I finally settled for US-West-2.</span>
+2. **Please take note to check the region where you are provisioning resources. I had issues later on when I had my services provisioned in different regions, however, I finally settled for US-West-2 for all my resources.**
+
+![image](https://github.com/user-attachments/assets/ac5879a1-95d1-403a-bbfc-84b9ebcf8a99)
+
 3. Choose the orange **Create Application button**.
 4. Choose **Web server environment** under the Configure environment heading.
-   
+5. In the text box under the heading Application name, enter **DevOpsGettingStarted**.
+6. In the Platform dropdown menu, under the Platform heading, select **Node.js**. Platform branch and Platform version will automatically populate with default selections.
+7. Confirm that the radio button next to Sample application under the Application code heading is selected.
+8. Confirm that the radio button next to Single instance (free tier eligible) under the Presets heading is selected.
+9. Select Next.
+10. On the Configure service access screen, choose **Use an existing service role for Service Role**.
+
+11. For EC2 instance profile dropdown list, the values displayed in this dropdown list may vary, depending on whether your account has previously created a new environment.
+
+![image](https://github.com/user-attachments/assets/20d9e953-acdf-4d71-a6dc-815d943f9fc4)
+
+12. Choose one of the following, based on the values displayed in your list.
+
+      - If aws-elasticbeanstalk-ec2-role displays in the dropdown list, select it from the EC2 instance profile dropdown list.
+      - If another value displays in the list, and it’s the default EC2 instance profile intended for your environments, select it from the EC2 instance profile dropdown list.
+      - If the EC2 instance profile dropdown list doesn't list any values to choose from, expand the procedure that follows, Create IAM Role for EC2 instance profile.
+      - Complete the steps in [Create IAM Role for EC2 instance profile](https://docs.aws.amazon.com/codedeploy/latest/userguide/getting-started-create-iam-instance-profile.html) to create an IAM Role that you can subsequently select for the EC2 instance profile. Then, return back to this step.
+    
+14. Now that you've created an IAM Role, and refreshed the list, it displays as a choice in the dropdown list. Select the IAM Role you just created from the EC2 instance profile dropdown list.
+15. Choose `Skip to Review` on the Configure service access page. This will select the default values for this step and skip the optional steps.
+
 ![image](https://github.com/user-attachments/assets/bd88c26e-1624-46b6-9e13-4eb4f7715834)
 
-4. In the text box under the heading Application name, enter **DevOpsGettingStarted**.
+16. The Review page displays a summary of all your choices.
 
-![image](https://github.com/user-attachments/assets/6770f7fe-a8ab-4a0a-8d74-e59e841e9ba5)
+17. Choose Submit at the bottom of the page to initialize the creation of your new environment.
+
+![image](https://github.com/user-attachments/assets/35db1666-783e-454a-9cc5-ccea05512c27)
+
+### Test the environment
+18. To test your environment, select the link in **Domain** under the name of your environment
+
+![image](https://github.com/user-attachments/assets/faf0351c-bb6a-484e-8f0b-1ed4fa0cf609)
+
+19. The domain should display this, the Node-js interface.
+
+![AWS EBS open page](https://github.com/user-attachments/assets/bb05320b-305b-4f81-8930-9f9433f0f415)
+
+## Stage 3 - Create Build Project
 
 
-5. In the Platform dropdown menu, under the Platform heading, select **Node.js**. Platform branch and Platform version will automatically populate with default selections.
-6. Confirm that the radio button next to Sample application under the Application code heading is selected.
-7. Confirm that the radio button next to Single instance (free tier eligible) under the Presets heading is selected.
-8. Select Next.
+
+
 
  
 
