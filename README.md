@@ -1,5 +1,5 @@
 # Continuous-Delivery-Pipeline-in-AWS
-I am about to walk you through how to develop a pipeline to aid smooth logging of changes to this application, which will require manual approval for the changes. We will create the pipeline using AWS CodePipeline, a service that builds, tests, and deploys your code every time there is a code change.
+I am about to walk you through how I developed a pipeline to aid smooth logging of changes to an application, which will require manual approval for the changes. We will create the pipeline using AWS CodePipeline, a service that builds, tests, and deploys your code every time there is a code change.
 
 The following diagram visually represents the services used in this project and how they are connected. This application uses GitHub, AWS Elastic Beanstalk, AWS CodeBuild, and AWS CodePipeline.
 
@@ -116,6 +116,7 @@ In this stage, we are focusing on three things
 ![AWS EBS open page](https://github.com/user-attachments/assets/bb05320b-305b-4f81-8930-9f9433f0f415)
 
 ## Stage 3 - Create Build Project
+
 1. In a new browser tab, open the [AWS CodeBuild console](https://console.aws.amazon.com/codesuite/codebuild/start?region=us-west-2).
 2. Choose the orange **Create project** button.
 3. In the Project name field, enter **Build-DevOpsGettingStarted**.
@@ -131,7 +132,7 @@ In this stage, we are focusing on three things
 
 ![image](https://github.com/user-attachments/assets/4675faae-239b-4b3a-b65e-caebb7b7ed83)
 
- Confirm that Managed Image is selected.
+Confirm that Managed Image is selected.
 
 13. Select **Amazon Linux 2** from the **Operating system** dropdown menu.
 
@@ -144,8 +145,9 @@ In this stage, we are focusing on three things
 17. Confirm that **Linux** is selected for Environment type.
 
 18. Confirm that **New service role** is selected.
+    
 
-*Creating the Buildspec file for the project*
+### Creating the Buildspec file for the project
 
 19. Select Insert build commands.
 20. Choose Switch to editor.
@@ -163,7 +165,7 @@ artifacts:
 ```
 22. Choose the orange Create build project button. You should now see a dashboard for your project.
 
-*Testing the build*
+### Testing the build
 
 23. Choose the orange *Start build* button. This will load a page to configure the build process.
 24. Confirm that the loaded page references the correct GitHub repo.
@@ -183,7 +185,7 @@ Stage—Logical division of a pipeline, where actions are performed. A stage mig
 
 Action—Set of tasks performed in a stage of the pipeline. For example, a source action can start a pipeline when source code is updated, and a deploy action can deploy code to a compute service like AWS Elastic Beanstalk.
 
-*Create a new pipeline*
+### Create the new pipeline
 
 1. In a browser window, open the [AWS CodePipeline console](https://console.aws.amazon.com/codesuite/codepipeline/start?region=us-west-2).
 2. Choose the orange **Create pipeline** button. A new screen will open up so you can set up the pipeline.
@@ -191,7 +193,7 @@ Action—Set of tasks performed in a stage of the pipeline. For example, a sourc
 4. Confirm that **New service role** is selected.
 5. Choose the orange *Next* button.
 
-*Configure Source Stage*
+### Configure Source Stage
 1. Select *GitHub version 1* from the **Source provider** dropdown menu.
 2. Choose the `white Connect` to GitHub button. A new browser tab will open asking you to give AWS CodePipeline access to your GitHub repo.
 3. Choose the green *Authorize aws-codesuite* button. Next, you will see a green box with the message You have successfully configured the action with the provider.
@@ -200,13 +202,13 @@ Action—Set of tasks performed in a stage of the pipeline. For example, a sourc
 6. Confirm that **GitHub webhooks** is selected.
 7. Choose the orange **Next** button.
 
-*Configure the build stage*
+### Configure the build stage
 1. From the **Build provider** dropdown menu, select `AWS CodeBuild`.
 2. Under Region confirm that the US West (Oregon) Region is selected. *Remember all your resources need to be provisioned in the same region to avoid issues later on.*
 3. Select *Build-DevOpsGettingStarted*  under Project name.
 4. Choose the orange *Next* button.
 
-*Configure the deploy stage*
+### Configure the deploy stage
 1. Select **AWS Elastic Beanstalk** from the Deploy provider dropdown menu.
 2. Under Region, confirm that the **US West (Oregon) Region** is selected.
 3. Select the field under Application name and confirm you can see the app **DevOpsGettingStarted** created in Module 2.
@@ -228,9 +230,69 @@ The content of my app
 
 
 ## Stage 5 - Finalize Pipeline and Test
+**Key concepts**
+Approval action — Type of pipeline action that stops the pipeline execution until someone approves or rejects it.
+
+Pipeline execution —Set of changes, such as a merged commit, released by a pipeline. Pipeline executions traverse the pipeline stages in order. Each pipeline stage can only process one execution at a time. To do this, a stage is locked while it processes an execution.
+
+Failed execution —If an execution fails, it stops and does not completely traverse the pipeline. The pipeline status changes to Failed and the stage that was processing the execution is unlocked. A failed execution can be retried or replaced by a more recent execution.
+
+### Creating Review stage in pipeline
+In order to be able to do manual approval of the pipeline, we need an additional stage to the pipeline stages, hence the need to add the `Review Stage`. The steps to do that are highlighted below:
+
+1. Open the [AWS CodePipeline console](https://console.aws.amazon.com/codesuite/codepipeline/pipelines?region=us-west-2).
+2. You should see the pipeline we created in Module 4, which was called **Pipeline-DevOpsGettingStarted**. Select this pipeline.
+3. Choose the white **Edit button** near the top of the page.
+4. Choose the white **Add stage** button between the Build and Deploy stages.
+5. In the Stage name field, enter Review.
+6. Choose the orange **Add stage** button.
+7. In the Review stage, choose the white **Add action** group button.
+8. Under Action name, enter **Manual_Review**.
+9. From the Action provider dropdown, select **Manual approval**.
+10. Confirm that the optional fields have been left blank.
+11. Choose the orange **Done** button.
+12. Choose the orange **Save** button at the top of the page.
+13. Choose the orange **Save** button to confirm the changes. `You will now see your pipeline with four stages: Source, Build, Review, and Deploy.`
+
+![Manual approval](https://github.com/user-attachments/assets/778a1ca6-b9fc-424b-aeae-db3529623bf2)
+
+### Push a new commit to your repo 
+**This stage is to basically test how the pipeline deals with code changes.**
+1. In your favorite code editor, open the `app.js` file from Module 1.
+2. Change the message in Line 5 to whatever you want.
+3. Save the file.
+4. Commit the change with the following commands:
+
+```
+git add app.js
+git commit -m "Full pipeline test"``
+```
+5. Push to github
+
+```
+git push
+```
+
+### Monitor the pipeline and manually approve the change 
+
+1. Navigate to the AWS CodePipeline console.
+2. Select the pipeline named Pipeline-DevOpsGettingStarted. You should see the Source and Build stages switch from blue to green.
+3. When the Review stage switches to blue, choose the white Review button.
+4. Write an approval comment in the Comments textbox.
+
+![Manual approval](https://github.com/user-attachments/assets/ddd63100-4209-49da-82bd-e8473d9eb171)
+
+5. Choose the orange **Approve** button.
+6. Wait for the **Review and Deploy stages** to switch to green.
+7. Select the AWS Elastic Beanstalk link in the Deploy stage.
+8. A new tab listing your Elastic Beanstalk environments will open.
+Select the URL in Domain. You should see a webpage with a white background and the text you had in your most recent GitHub commit. Just like mine below.
+
+![Finale output](https://github.com/user-attachments/assets/97963710-6cf3-4e8f-a975-0c540bbbfc90)
 
 
 
+**Congratulations! You have a fully functional continuous delivery pipeline hosted on AWS.**
 
 
 ## Acknowledgments
