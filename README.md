@@ -116,6 +116,118 @@ In this stage, we are focusing on three things
 ![AWS EBS open page](https://github.com/user-attachments/assets/bb05320b-305b-4f81-8930-9f9433f0f415)
 
 ## Stage 3 - Create Build Project
+1. In a new browser tab, open the [AWS CodeBuild console](https://console.aws.amazon.com/codesuite/codebuild/start?region=us-west-2).
+2. Choose the orange **Create project** button.
+3. In the Project name field, enter **Build-DevOpsGettingStarted**.
+4. Select GitHub from the **Source Provider** dropdown menu.
+5. Confirm that the **Connect using OAuth** radio button is selected.
+6. Choose the white **Connect to GitHub** button. A new browser tab will open asking you to give AWS CodeBuild access to your GitHub repo.
+7. Choose the green **Authorize aws-codesuite** button.
+8. Enter your GitHub password.
+9. Choose the orange `Confirm` button.
+10. Select Repository in my GitHub account.
+11. Enter `aws-elastic-beanstalk-express-js-sample` in the search field.
+12. Select the repo you forked in Module 1. After selecting your repo, your screen should look like this:
+
+![image](https://github.com/user-attachments/assets/4675faae-239b-4b3a-b65e-caebb7b7ed83)
+
+ Confirm that Managed Image is selected.
+
+13. Select **Amazon Linux 2** from the **Operating system** dropdown menu.
+
+14. Select Standard from the Runtime(s) dropdown menu.
+
+15. Select `aws/codebuild/amazonlinux2-x86_64-standard:3.0`from the Image dropdown menu.
+
+16. Confirm that **Always use the latest image** for this runtime version is selected for Image version.
+
+17. Confirm that **Linux** is selected for Environment type.
+
+18. Confirm that **New service role** is selected.
+
+*Creating the Buildspec file for the project*
+
+19. Select Insert build commands.
+20. Choose Switch to editor.
+21. Replace the Buildspec in the editor with the code below:
+
+```
+version: 0.2
+phases:
+    build:
+        commands:
+            - npm i --save
+artifacts:
+    files:
+        - '**/*'
+```
+22. Choose the orange Create build project button. You should now see a dashboard for your project.
+
+*Testing the build*
+
+23. Choose the orange *Start build* button. This will load a page to configure the build process.
+24. Confirm that the loaded page references the correct GitHub repo.
+25. Choose the orange *Start build* button.
+`Wait for the build to complete. As you are waiting you should see a green bar at the top of the page with the message Build started, the progress for your build under Build log, and, after a couple minutes, a green checkmark and a Succeeded message confirming the build worked.`
+
+![AWS code build](https://github.com/user-attachments/assets/bd1b58b7-5577-4b78-9ece-86ebcb173993)
+
+
+## Stage 4 - Create Delivery Pipeline
+**Key concepts**
+Continuous delivery—Software development practice that allows developers to release software more quickly by automating the build, test, and deploy processes.
+
+Pipeline—Workflow model that describes how software changes go through the release process. Each pipeline is made up of a series of stages.
+
+Stage—Logical division of a pipeline, where actions are performed. A stage might be a build stage, where the source code is built and tests are run. It can also be a deployment stage, where code is deployed to runtime environments.
+
+Action—Set of tasks performed in a stage of the pipeline. For example, a source action can start a pipeline when source code is updated, and a deploy action can deploy code to a compute service like AWS Elastic Beanstalk.
+
+*Create a new pipeline*
+
+1. In a browser window, open the [AWS CodePipeline console](https://console.aws.amazon.com/codesuite/codepipeline/start?region=us-west-2).
+2. Choose the orange **Create pipeline** button. A new screen will open up so you can set up the pipeline.
+3. In the Pipeline name field, enter **Pipeline-DevOpsGettingStarted**.
+4. Confirm that **New service role** is selected.
+5. Choose the orange *Next* button.
+
+*Configure Source Stage*
+1. Select *GitHub version 1* from the **Source provider** dropdown menu.
+2. Choose the `white Connect` to GitHub button. A new browser tab will open asking you to give AWS CodePipeline access to your GitHub repo.
+3. Choose the green *Authorize aws-codesuite* button. Next, you will see a green box with the message You have successfully configured the action with the provider.
+4. From the Repository dropdown, select the repo you created in Module 1.
+5. Select **main** from the branch dropdown menu.
+6. Confirm that **GitHub webhooks** is selected.
+7. Choose the orange **Next** button.
+
+*Configure the build stage*
+1. From the **Build provider** dropdown menu, select `AWS CodeBuild`.
+2. Under Region confirm that the US West (Oregon) Region is selected. *Remember all your resources need to be provisioned in the same region to avoid issues later on.*
+3. Select *Build-DevOpsGettingStarted*  under Project name.
+4. Choose the orange *Next* button.
+
+*Configure the deploy stage*
+1. Select **AWS Elastic Beanstalk** from the Deploy provider dropdown menu.
+2. Under Region, confirm that the **US West (Oregon) Region** is selected.
+3. Select the field under Application name and confirm you can see the app **DevOpsGettingStarted** created in Module 2.
+4. Select **DevOpsGettingStarted-env** from the Environment name textbox.
+5. Choose the orange **Next** button. You will now see a page where you can review the pipeline configuration.
+6. Choose the orange **Create pipeline** button.
+
+![pipeine deployed](https://github.com/user-attachments/assets/911232f1-b3e6-4b09-ae99-95d1871f7c6b)
+
+While watching the pipeline execution, you will see a page with a green bar at the top. This page shows all the steps defined for the pipeline and, after a few minutes, each will change from blue to green.
+
+Once the Deploy stage has switched to green and it says Succeeded, choose AWS Elastic Beanstalk. A new tab listing your AWS Elastic Beanstalk environments will open.
+Select the URL in the Devopsgettingstarted-env row. You should see a webpage with a white background and the text you included in your GitHub commit in Module 1.
+
+![AWS deploy](https://github.com/user-attachments/assets/40497f06-2a73-49c8-b827-5c895a825ca1)
+
+The content of my app
+![Final web page view](https://github.com/user-attachments/assets/b0d7dfe7-24f5-45f2-bac2-ed6c8e99f029)
+
+
+## Stage 5 - Finalize Pipeline and Test
 
 
 
